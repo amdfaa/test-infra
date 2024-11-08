@@ -89,16 +89,17 @@ interface RowDataBase extends CommitData {
   isForcedMerge: boolean | false;
   isForcedMergeWithFailures: boolean | false;
 }
+
 export interface RowData extends RowDataBase {
   nameToJobs: Map<string, JobData>;
 }
 
-export interface CondensedRowData extends RowDataBase {
+interface RowDataAPIResponse extends RowDataBase {
   jobs: JobData[];
 }
 
-export interface HudData {
-  shaGrid: RowData[];
+export interface HudDataAPIResponse {
+  shaGrid: RowDataAPIResponse[];
   jobNames: string[];
 }
 

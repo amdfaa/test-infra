@@ -1,18 +1,18 @@
 import { useCHContext } from "components/UseClickhouseProvider";
 import useSWR from "swr";
 import {
-  CondensedRowData,
   formatHudUrlForFetch,
   HudParams,
   JobData,
   RowData,
+  HudDataAPIResponse,
 } from "./types";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function useHudData(params: HudParams): RowData[] | undefined {
   const { useCH } = useCHContext();
-  const { data } = useSWR(
+  let { data } = useSWR<HudDataAPIResponse>(
     formatHudUrlForFetch("api/hud", { ...params, use_ch: useCH }),
     fetcher,
     {
@@ -28,13 +28,13 @@ export default function useHudData(params: HudParams): RowData[] | undefined {
     return data;
   }
 
-  data.shaGrid.forEach((row: CondensedRowData) => {
+  data.shaGrid.forEach((row) => {
     row.jobs.forEach((job: JobData, index: number) => {
       job.name = data.jobNames[index];
     });
   });
 
-  const newShaGrid = data.shaGrid.map((row: CondensedRowData) => {
+  const newShaGrid = data.shaGrid.map((row) => {
     let unCondensedRow: RowData = {
       ...row,
       nameToJobs: new Map<string, JobData>(),
@@ -42,7 +42,7 @@ export default function useHudData(params: HudParams): RowData[] | undefined {
     unCondensedRow.nameToJobs =
       row.jobs.reduce((map, obj) => (map.set(obj.name, obj), map), new Map()) ??
       new Map();
-    // @ts-ignore - jobs is not in RowData
+    // @ts-ignore - jobs should not be there but is because of the ... during init
     delete unCondensedRow.jobs;
     return unCondensedRow;
   });

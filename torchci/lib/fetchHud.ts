@@ -6,7 +6,12 @@ import { commitDataFromResponse, getOctokit } from "./github";
 import { getNameWithoutLF, isFailure } from "./JobClassifierUtil";
 import { isRerunDisabledTestsJob, isUnstableJob } from "./jobUtils";
 import getRocksetClient from "./rockset";
-import { CondensedRowData, HudParams, JobData } from "./types";
+import {
+  RowDataAPIResponse,
+  HudDataAPIResponse,
+  HudParams,
+  JobData,
+} from "./types";
 
 async function fetchDatabaseInfo(
   owner: string,
@@ -54,10 +59,7 @@ async function fetchDatabaseInfo(
   }
 }
 
-export default async function fetchHud(params: HudParams): Promise<{
-  shaGrid: CondensedRowData[];
-  jobNames: string[];
-}> {
+export default async function fetchHud(params: HudParams): Promise<HudDataAPIResponse> {
   // Retrieve commit data from GitHub
   const octokit = await getOctokit(params.repoOwner, params.repoName);
   const branch = await octokit.rest.repos.listCommits({
@@ -184,7 +186,7 @@ export default async function fetchHud(params: HudParams): Promise<{
   });
   const names = Array.from(namesSet).sort();
 
-  const shaGrid: CondensedRowData[] = [];
+  const shaGrid: RowDataAPIResponse[] = [];
 
   _.forEach(commitsBySha, (commit, sha) => {
     const jobs: JobData[] = [];
@@ -204,7 +206,7 @@ export default async function fetchHud(params: HudParams): Promise<{
       }
     }
 
-    const row: CondensedRowData = {
+    const row = {
       ...commit,
       jobs: jobs,
       isForcedMerge: forcedMergeShas.has(commit.sha),
