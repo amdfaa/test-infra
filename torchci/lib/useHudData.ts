@@ -23,14 +23,14 @@ export default function useHudData(params: HudParams): RowData[] | undefined {
     }
   );
 
-  // Add job name info back into the data (it was stripped out as technically it's redundant)
   if (data === undefined) {
     return data;
   }
 
+  // Add job name info back into the data (it was stripped out as technically it's redundant)
   data.shaGrid.forEach((row) => {
     row.jobs.forEach((job: JobData, index: number) => {
-      job.name = data.jobNames[index];
+      job.name = data?.jobNames[index]; // It's not undefined but tsc is complaining
     });
   });
 
