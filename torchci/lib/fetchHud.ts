@@ -7,10 +7,10 @@ import { getNameWithoutLF, isFailure } from "./JobClassifierUtil";
 import { isRerunDisabledTestsJob, isUnstableJob } from "./jobUtils";
 import getRocksetClient from "./rockset";
 import {
-  RowDataAPIResponse,
   HudDataAPIResponse,
   HudParams,
   JobData,
+  RowDataAPIResponse,
 } from "./types";
 
 async function fetchDatabaseInfo(
@@ -59,7 +59,9 @@ async function fetchDatabaseInfo(
   }
 }
 
-export default async function fetchHud(params: HudParams): Promise<HudDataAPIResponse> {
+export default async function fetchHud(
+  params: HudParams
+): Promise<HudDataAPIResponse> {
   // Retrieve commit data from GitHub
   const octokit = await getOctokit(params.repoOwner, params.repoName);
   const branch = await octokit.rest.repos.listCommits({

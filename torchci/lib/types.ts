@@ -94,7 +94,7 @@ export interface RowData extends RowDataBase {
   nameToJobs: Map<string, JobData>;
 }
 
-interface RowDataAPIResponse extends RowDataBase {
+export interface RowDataAPIResponse extends RowDataBase {
   jobs: JobData[];
 }
 

@@ -2,10 +2,10 @@ import { useCHContext } from "components/UseClickhouseProvider";
 import useSWR from "swr";
 import {
   formatHudUrlForFetch,
+  HudDataAPIResponse,
   HudParams,
   JobData,
   RowData,
-  HudDataAPIResponse,
 } from "./types";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
