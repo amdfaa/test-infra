@@ -6,7 +6,7 @@ import { commitDataFromResponse, getOctokit } from "./github";
 import { getNameWithoutLF, isFailure } from "./JobClassifierUtil";
 import { isRerunDisabledTestsJob, isUnstableJob } from "./jobUtils";
 import getRocksetClient from "./rockset";
-import { HudParams, JobData, RowData } from "./types";
+import { CondensedRowData, HudParams, JobData } from "./types";
 
 async function fetchDatabaseInfo(
   owner: string,
@@ -55,7 +55,7 @@ async function fetchDatabaseInfo(
 }
 
 export default async function fetchHud(params: HudParams): Promise<{
-  shaGrid: RowData[];
+  shaGrid: CondensedRowData[];
   jobNames: string[];
 }> {
   // Retrieve commit data from GitHub
@@ -184,7 +184,7 @@ export default async function fetchHud(params: HudParams): Promise<{
   });
   const names = Array.from(namesSet).sort();
 
-  const shaGrid: RowData[] = [];
+  const shaGrid: CondensedRowData[] = [];
 
   _.forEach(commitsBySha, (commit, sha) => {
     const jobs: JobData[] = [];
@@ -204,7 +204,7 @@ export default async function fetchHud(params: HudParams): Promise<{
       }
     }
 
-    const row: RowData = {
+    const row: CondensedRowData = {
       ...commit,
       jobs: jobs,
       isForcedMerge: forcedMergeShas.has(commit.sha),
