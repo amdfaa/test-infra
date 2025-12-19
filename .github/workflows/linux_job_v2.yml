@@ -165,7 +165,7 @@ jobs:
         if: ${{ inputs.gpu-arch-type != 'rocm' }}
 
       - name: Setup ROCM
-        uses: pytorch/pytorch/.github/actions/setup-rocm@main
+        uses: amdfaa/pytorch/.github/actions/setup-rocm@patch-41
         if: ${{ inputs.gpu-arch-type == 'rocm' }}
 
       - name: Setup SSH
